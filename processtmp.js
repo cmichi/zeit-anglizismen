@@ -1,13 +1,13 @@
 var fs = require("fs");
 
 var files = fs.readdirSync("./tmp/");
-console.log("found " + files.length + " files")
+//console.log("found " + files.length + " files")
 
 var dates = {};
 
 for (var f in files) {
 	var filename = "./tmp/" + files[f];
-	console.log(filename)
+	//console.log(filename)
 	var data = fs.readFileSync(filename, {encoding: "utf8"});
 	data = JSON.parse(data);
 	//console.log(data.facets.release_date);
@@ -23,7 +23,7 @@ for (var f in files) {
 		dates[date.getFullYear()] += data.facets.release_date[i];
 		//console.log(date.getFullYear() + "\t" + data.facets.release_date[i])
 	}
-	break;
+	//break;
 }
 
 for (var d in dates) {
