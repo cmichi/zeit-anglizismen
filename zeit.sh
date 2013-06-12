@@ -10,6 +10,6 @@ while read l; do
 	echo $i
 	echo $lp
 	i=$((i+1))
-	#curl -H "X-Authorization: ${api_key}" $uri > ./tmp/$l
+	curl -H "X-Authorization: ${api_key}" $uri > ./tmp/$l
 done < _foo
 #done < anglizismen.txt

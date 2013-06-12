@@ -1,5 +1,11 @@
 default: fromwiki
 
+clean:
+	rm ./data/*
+	rm ./tmp/*
+	rm -r ./data/
+	rm -r ./tmp/
+
 fromwiki:
 	mkdir ./data/
 	curl "http://de.wiktionary.org/wiki/Wiktionary:Deutsch/Liste_der_Anglizismen" > ./data/anglizismen.html
