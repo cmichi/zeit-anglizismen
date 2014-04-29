@@ -1,8 +1,10 @@
-# Visualizing angliciscm usage in _Die Zeit_ over time
+# How many articles in _Die Zeit_ contained anglicisms?
+
 
 **Project Status:** WIP! Not finished. Did a quick hack of this
 idea about 11 months ago, but never got around to properly finish
 it. Gonna do this now.
+CURRENT PROBLEM: We need to request all matche uuid's for a word.
 
 The idea of this project is to visualize the distribution of
 anglicism use in the magazine [Die Zeit](http://www.zeit.de) over 
