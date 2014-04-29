@@ -17,11 +17,11 @@ fromwiki:
 
 requestapi:
 	mkdir -p ./tmp/
-	/bin/sh ./zeit.sh
+	/bin/sh ./zeit.sh > requestapi.log
 
 normalize:
 	mkdir -p ./tmp_normalize/
 	/bin/sh ./normalize.sh
 
 processtmp:
-	node processtmp.js
+	node processtmp.js > ./tmp_normalize/anglicisms.tsv
