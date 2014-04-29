@@ -1,4 +1,4 @@
-# Visualizing angliciscm in "Die Zeit"
+# Visualizing angliciscm usage in _Die Zeit_ over time
 
 **Project Status:** WIP! Not finished. Did a quick hack of this
 idea about 11 months ago, but never got around to properly finish
@@ -31,6 +31,14 @@ At the moment (April 2014) there are 994 anglicisms in this list.
 	$ make requestapi
 	# results in requesting http://api.zeit.de/content?q=WORD&facet_date=1year 
 	# for each anglicism in ./data/anglizismen.txt
+
+	$ make normalize
+	# results in requesting http://api.zeit.de/content?face_date=1year 
+	# for 1945-2013. a file ./tmp_normalize/all_years.asc will be
+	# created
+
+	$ make processtmp
+
 
 
 # License

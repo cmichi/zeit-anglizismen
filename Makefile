@@ -23,3 +23,5 @@ normalize:
 	mkdir -p ./tmp_normalize/
 	/bin/sh ./normalize.sh
 
+processtmp:
+	node processtmp.js
