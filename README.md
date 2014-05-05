@@ -1,19 +1,17 @@
-# How many articles in DIE ZEIT/ZEIT ONLINE contained anglicisms?
+# Anglicisms in DIE ZEIT and ZEIT ONLINE
 
 The idea of this project is to visualize the distribution of
-anglicism use in the magazine [Die Zeit](http://www.zeit.de) over 
-the years.
+anglicism use in the german weekly newspage[Die Zeit](http://www.zeit.de) 
+and [ZEIT ONLINE](http://www.zeit.de) over the years.
 
-The list of anglicisms is taken from the Wiktionary project:
-http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen
-At the moment (April 2014) there are around 960 anglicisms in 
-the list.
+The [list of anglicisms](http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen)
+is taken from the Wiktionary project. At the moment (April 2014) there 
+are around 960 anglicisms in this list.
 
 
 ## Documentation
 
-This is mainly meant as a documentation of the process, how i got 
-to the visualizations.
+This is mainly meant as a documentation of the process.
 
 	$ echo "yourapikey" > api_key
 
