@@ -12,7 +12,7 @@ The idea of this project is to visualize the distribution of
 anglicism use in the magazine [Die Zeit](http://www.zeit.de) over 
 the years.
 
-The list of anglicisms is taken from the Wikitionary project:
+The list of anglicisms is taken from the Wiktionary project:
 http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen
 At the moment (April 2014) there are 994 anglicisms in this list.
 

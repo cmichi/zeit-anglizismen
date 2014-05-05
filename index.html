@@ -132,14 +132,14 @@ d3.tsv("wordStatistic/" + word + ".tsv", function(error, data) {
 	.attr("y", 10)
 	.attr("text-anchor", "middle")  
 	.style("font-size", "16px") 
-	.text("Anteil der Artikel mit dem Wort '"+word+"' im Magazin 'Die Zeit'")
+	.text("Article matches for “"+word+"” in DIE ZEIT and ZEIT ONLINE")
 
       svg.append("text")
 	.attr("x", (width / 2))             
 	.attr("y", 30)
 	.attr("text-anchor", "middle")  
 	.style("font-size", "16px") 
-	.text("Skala: 0-"+maxY+"%")
+	.text("Scale: 0-"+maxY+"%")
 
   svg.append("g")
       .attr("class", "y axis")
@@ -190,10 +190,9 @@ d3.tsv("wordStatistic/" + word + ".tsv", function(error, data) {
     focus.attr("transform", "translate(" + x(d.year) + "," + y(d.portion) + ")");
 
     var txt = 
-	      "<strong>" + d.year + "<span style='float:right'>" + formatValue(d.portion)
-	      + "%</span></strong><br/>"
-	    + "Artikel die '"+word+"' enthielten: " + d.word_count + "</span><br />"
-	    + "Artikel gesamt: " + formatValueTotal(d.total_count)
+	"<strong>" + d.year + "<span style='float:right'>" + formatValue(d.portion) + "%</span></strong><br/>"
+	+ "Article matches for “"+word+"”:" + d.word_count + "</span><br />"
+	+ "Articles total: " + formatValueTotal(d.total_count)
 
     //focus.select("text").html(txt);
     //focus.select("text").text(formatCurrency(d.portion));
