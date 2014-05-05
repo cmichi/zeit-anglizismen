@@ -6,3 +6,4 @@ echo $uri
 curl -H "X-Authorization: ${api_key}" $uri > ./tmp_normalize/all_years.json
 
 node normalize.js | sort > ./tmp_normalize/all_years.tsv
+node outputAll.js > ./tmp_normalize/all.json

@@ -1,5 +1,7 @@
 # How many articles in _Die Zeit_ contained anglicisms?
 
+TODO: Gesamtzahl Artikel in Statistik einfuegen, um es einordnen 
+zu koennen.
 
 **Project Status:** WIP! Not finished. Did a quick hack of this
 idea about 11 months ago, but never got around to properly finish
@@ -12,8 +14,16 @@ the years.
 
 The list of anglicisms is taken from the Wikitionary project:
 http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen
-
 At the moment (April 2014) there are 994 anglicisms in this list.
+
+ * We take this list and do this with each word:
+   * Request all articles with a match for the word.
+     * Does the file ./counter/$year/$uuid exist?
+       Yes: continue;
+       No: Create it. Append $word to it.
+
+ * Visualization: Compute the distribution in each year using 
+   `ls ./counter/$year/ | wc` / `$totalCountOfArticlesInThisYear`
 
 
 ## Documentation
@@ -28,7 +38,8 @@ At the moment (April 2014) there are 994 anglicisms in this list.
 	$ npm install xmldom
 
 	$ make fromwiki
-	# results in ./data/anglizismen.txt
+	# results in ./data/anglizismen.txt -- be sure to manually look through the 
+	# list! there will definitely be duplicate entries due to wiki inconsistencies.
 
 	$ make requestapi
 	# results in requesting http://api.zeit.de/content?q=WORD&facet_date=1year 

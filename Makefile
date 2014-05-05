@@ -8,6 +8,7 @@ clean:
 	rm -r ./data/
 	rm -r ./tmp/
 	rm -r ./tmp_normalize/
+	rm -r ./wordStatistic/
 
 fromwiki:
 	mkdir -p ./data/
@@ -25,3 +26,7 @@ normalize:
 
 processtmp:
 	node processtmp.js > ./tmp_normalize/anglicisms.tsv
+
+wordStatistic:
+	mkdir -p ./wordStatistic/
+	/bin/sh ./wordStatistic.sh
