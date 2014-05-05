@@ -63,7 +63,7 @@ var yAxis = d3.svg.axis()
 
 var line = d3.svg.line()
     .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.count); });
+    .y(function(d) { return y(d.portion); });
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -83,7 +83,7 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
 
   x.domain([data[0].year, data[data.length - 1].year]);
   y.domain([0, 0.05]);
-  //y.domain(d3.extent(data, function(d) { return d.count; }));
+  //y.domain(d3.extent(data, function(d) { return d.portion; }));
 
   svg.append("g")
       .attr("class", "x axis")
@@ -130,9 +130,9 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
         d0 = data[i - 1],
         d1 = data[i],
         d = x0 - d0.year > d1.year - x0 ? d1 : d0;
-    focus.attr("transform", "translate(" + x(d.year) + "," + y(d.count) + ")");
-    focus.select("text").text((d.count));
-    //focus.select("text").text(formatCurrency(d.count));
+    focus.attr("transform", "translate(" + x(d.year) + "," + y(d.portion) + ")");
+    focus.select("text").text((d.portion));
+    //focus.select("text").text(formatCurrency(d.portion));
   }
 });
 
