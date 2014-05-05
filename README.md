@@ -1,12 +1,14 @@
 # Anglicisms in DIE ZEIT and ZEIT ONLINE
 
 The idea of this project is to visualize the distribution of
-anglicism use in the german weekly newspage[Die Zeit](http://www.zeit.de) 
+anglicism use in the german weekly newspaper [Die Zeit](http://www.zeit.de) 
 and [ZEIT ONLINE](http://www.zeit.de) over the years.
-
 The [list of anglicisms](http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen)
 is taken from the Wiktionary project. At the moment (April 2014) there 
 are around 960 anglicisms in this list.
+
+See [here](http://cmichi.github.io/zeit-anglizismen/?selector=1&word=greenpeace) 
+for the visualizations.
 
 
 ## Documentation
