@@ -1,12 +1,4 @@
-# How many articles in _Die Zeit_ contained anglicisms?
-
-TODO: Gesamtzahl Artikel in Statistik einfuegen, um es einordnen 
-zu koennen.
-
-**Project Status:** WIP! Not finished. Did a quick hack of this
-idea about 11 months ago, but never got around to properly finish
-it. Gonna do this now.
-CURRENT PROBLEM: We need to request all matche uuid's for a word.
+# How many articles in DIE ZEIT/ZEIT ONLINE contained anglicisms?
 
 The idea of this project is to visualize the distribution of
 anglicism use in the magazine [Die Zeit](http://www.zeit.de) over 
@@ -14,54 +6,52 @@ the years.
 
 The list of anglicisms is taken from the Wiktionary project:
 http://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Anglizismen
-At the moment (April 2014) there are 994 anglicisms in this list.
-
- * We take this list and do this with each word:
-   * Request all articles with a match for the word.
-     * Does the file ./counter/$year/$uuid exist?
-       Yes: continue;
-       No: Create it. Append $word to it.
-
- * Visualization: Compute the distribution in each year using 
-   `ls ./counter/$year/ | wc` / `$totalCountOfArticlesInThisYear`
+At the moment (April 2014) there are around 960 anglicisms in 
+the list.
 
 
 ## Documentation
 
+This is mainly meant as a documentation of the process, how i got 
+to the visualizations.
+
 	$ echo "yourapikey" > api_key
 
 	# test if access to the API works:
-	$ curl -H "X-Authorization: `cat api_key`" http://api.zeit.de/content?q=&facet_date=1year | less
+	$ curl -H "X-Authorization: `cat api_key`" \
+		http://api.zeit.de/content?q=&facet_date=1year | less
 
 	# install necessary dependencies -- node.js, npm and those libs:
 	$ npm install xpath
 	$ npm install xmldom
 
 	$ make fromwiki
-	# results in ./data/anglizismen.txt -- be sure to manually look through the 
-	# list! there will definitely be duplicate entries due to wiki inconsistencies.
+	# results in ./data/anglizismen.txt -- be sure to manually look 
+	# through the list! there will definitely be duplicate entries 
+	# due to wiki inconsistencies.
 
 	$ make requestapi
 	# results in requesting http://api.zeit.de/content?q=WORD&facet_date=1year 
-	# for each anglicism in ./data/anglizismen.txt
+	# for each anglicism in ./data/anglizismen.txt.
 
 	$ make normalize
 	# results in requesting http://api.zeit.de/content?face_date=1year 
 	# for 1945-2013. a file ./tmp_normalize/all_years.asc will be
-	# created
+	# created.
 
 	$ make processtmp
+	# results in ./tmp_normalize/anglicisms.tsv, a tsv
+	# which contains the total number of articles available in
+	# each year.
+
+	$ make wordStatistic
+	# results in ./wordStatistic/$anglicism.tsv for each anglicism.
+
+	$ python -mSimpleHTTPServer
+	# open http://localhost:8000/?word=greenpeace in your browser.
 
 
-
-# License
-
-### Visualization (CC-BY 4.0)
-
-	The visualization is licensed under the Creative Commons Attribution
-	4.0 International license: http://creativecommons.org/licenses/by/4.0/.
-
-### Code (MIT)
+# License (MIT)
 
 	Copyright (c) 2014
 
