@@ -42,7 +42,7 @@ div.tooltip {
 	border-radius: 8px;           
 	font-size:10px;
 	pointer-events: none;
-	opacity: 0.8;
+	opacity: 0.0;
 }
 
 .tooltip h3 {
@@ -53,20 +53,22 @@ div.tooltip {
 }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.js"></script>
+<select style="display:none;" onchange="sel(this)" id="allwords"></select><br/>
+
+<script src="./d3.v3.js"></script>
+<script type="text/javascript" src="./allwords.js"></script>
 <script>
 function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
+	var query = window.location.search.substring(1);
 	var vars = query.split('&');
-	    for (var i = 0; i < vars.length; i++) {
-		    var pair = vars[i].split('=');
-			    if (decodeURIComponent(pair[0]) == variable) {
-					return decodeURIComponent(pair[1]);
-						}
-						    }
-							}
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split('=');
+		if (decodeURIComponent(pair[0]) == variable) 
+			return decodeURIComponent(pair[1]);
+	}
+}
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 30, right: 50, bottom: 30, left: 50},
     width = 670 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -102,115 +104,143 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-var word = getQueryVariable('word').replace("/","");
-var maxY = 0.05;
+var word = getQueryVariable('word');
+if (word) word = word.replace("/","");
 
-if (word == "golf") maxY = 0.1;
+var showSelect = getQueryVariable('selector');
+if (showSelect) showSelect = showSelect.replace("/","");
+if (showSelect == "1") {
+	for (var t in tsvs) {
+		var val = tsvs[t];
+		var selected = false;
+		if (word == val) selected = true;
+		entry = new Option(val, val, false, selected);
+		document.getElementById('allwords').options[document.getElementById('allwords').length] = entry; 
+	}
+	document.getElementById('allwords').style.display = "block";
+}
 
-d3.tsv("wordStatistic/" + word + ".tsv", function(error, data) {
-  data.forEach(function(d) {
-    //d.date = parseDate(d.date);
-    //d.close = +d.close;
-  });
+if (word) {
+	var maxY = 0.05;
 
-  data.sort(function(a, b) {
-    return a.year - b.year;
-  });
+	if (word == "golf") maxY = 0.1;
 
-  x.domain([data[0].year, data[data.length - 1].year]);
-  y.domain([0, maxY]);
+	d3.tsv("wordStatistic/" + word + ".tsv", function(error, data) {
+	  data.forEach(function(d) {
+	    //d.date = parseDate(d.date);
+	    //d.close = +d.close;
+	  });
 
-  //y.domain(d3.extent(data, function(d) { return d.portion; }));
+	  data.sort(function(a, b) {
+	    return a.year - b.year;
+	  });
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+	  x.domain([data[0].year, data[data.length - 1].year]);
+	  y.domain([0, maxY]);
 
-      svg.append("text")
-	.attr("x", (width / 2))             
-	.attr("y", 10)
-	.attr("text-anchor", "middle")  
-	.style("font-size", "16px") 
-	.text("Article matches for “"+word+"” in DIE ZEIT and ZEIT ONLINE")
+	if (showSelect)
+		y.domain([0, d3.max(data, function(d) { return Math.max(d.portion); })]);
 
-      svg.append("text")
-	.attr("x", (width / 2))             
-	.attr("y", 30)
-	.attr("text-anchor", "middle")  
-	.style("font-size", "16px") 
-	.text("Scale: 0-"+maxY+"%")
+	  //y.domain(d3.extent(data, function(d) { return d.portion; }));
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      //.text("Anteil Artikel mit diesem Wort");
+	  svg.append("g")
+	      .attr("class", "x axis")
+	      .attr("transform", "translate(0," + height + ")")
+	      .call(xAxis);
 
-  svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("d", line);
+	      svg.append("text")
+		.attr("x", (width / 2))             
+		.attr("y", -15)
+		.attr("text-anchor", "middle")  
+		.style("font-size", "16px") 
+		.text("Article matches for “"+word+"” in DIE ZEIT and ZEIT ONLINE")
 
-  var focus = svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none");
+	if (!showSelect)
+	      svg.append("text")
+		.attr("x", (width / 2))             
+		.attr("y", 5)
+		.attr("text-anchor", "middle")  
+		.style("font-size", "16px") 
+		.text("Scale: 0-"+maxY+"%")
 
-  focus.append("circle")
-      .attr("r", 4.5);
+	  svg.append("g")
+	      .attr("class", "y axis")
+	      .call(yAxis)
+	    .append("text")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", 6)
+	      .attr("dy", ".71em")
+	      .style("text-anchor", "end")
+	      //.text("Anteil Artikel mit diesem Wort");
 
-/*
-  focus.append("text")
-      .attr("x", 9)
-      .attr("dy", ".35em");
-      */
+	  svg.append("path")
+	      .datum(data)
+	      .attr("class", "line")
+	      .attr("d", line);
 
-  svg.append("rect")
-      .attr("class", "overlay")
-      .attr("width", width)
-      .attr("height", height)
-      .on("mouseover", function() { focus.style("display", null); })
-      .on("mouseout", function() { focus.style("display", "none"); })
-      .on("mousemove", mousemove);
+	  var focus = svg.append("g")
+	      .attr("class", "focus")
+	      .style("display", "none");
 
-      var div = d3.select("body").append("div")   
-	  .attr("class", "tooltip")               
-	      //.style("opacity", 0)
+	  focus.append("circle")
+	      .attr("r", 4.5);
 
-  function mousemove() {
-    var x0 = x.invert(d3.mouse(this)[0]),
-        i = bisectDate(data, x0, 1),
-        d0 = data[i - 1],
-        d1 = data[i],
-        d = x0 - d0.year > d1.year - x0 ? d1 : d0;
-    focus.attr("transform", "translate(" + x(d.year) + "," + y(d.portion) + ")");
+	/*
+	  focus.append("text")
+	      .attr("x", 9)
+	      .attr("dy", ".35em");
+	      */
 
-    var txt = 
-	"<strong>" + d.year + "<span style='float:right'>" + formatValue(d.portion) + "%</span></strong><br/>"
-	+ "Article matches for “"+word+"”:" + d.word_count + "</span><br />"
-	+ "Articles total: " + formatValueTotal(d.total_count)
+	  svg.append("rect")
+	      .attr("class", "overlay")
+	      .attr("width", width)
+	      .attr("height", height)
+	      .on("mouseover", function() { focus.style("display", null); })
+	      .on("mouseout", function() { focus.style("display", "none"); })
+	      .on("mousemove", mousemove);
 
-    //focus.select("text").html(txt);
-    //focus.select("text").text(formatCurrency(d.portion));
+	      var div = d3.select("body").append("div")   
+		  .attr("class", "tooltip")               
+		      //.style("opacity", 0)
+
+	  function mousemove() {
+	    var x0 = x.invert(d3.mouse(this)[0]),
+		i = bisectDate(data, x0, 1),
+		d0 = data[i - 1],
+		d1 = data[i],
+		d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+	    focus.attr("transform", "translate(" + x(d.year) + "," + y(d.portion) + ")");
+
+	    var txt = 
+		"<strong>" + d.year + "<span style='float:right'>" + formatValue(d.portion) + "%</span></strong><br/>"
+		+ "Article matches for “"+word+"”:" + d.word_count + "</span><br />"
+		+ "Articles total: " + formatValueTotal(d.total_count)
+
+	    //focus.select("text").html(txt);
+	    //focus.select("text").text(formatCurrency(d.portion));
 
 
-var top = (d3.event.pageY - 60);
-var left = (d3.event.pageX);
+	var top = (d3.event.pageY - 60);
+	var left = (d3.event.pageX);
 
-var w = width - margin.left - margin.right;
-if (left > w) left = w;
-if (top < 60) top = 60;
+	var w = width - margin.left - margin.right;
+	if (left > w) left = w;
+	if (top < 60) top = 60;
 
-	div.html(txt)  
-		.style("left", left + "px")     
-		.style("top", top + "px")
-		//.style("opacity", "1.0");    
+		div.html(txt)  
+			.style("left", left + "px")     
+			.style("top", top + "px")
+			.style("opacity", "0.8");    
 
-  }
-});
+	  }
+	});
+}
 
+
+function sel(t) {
+	if (t.selectedIndex) {
+		document.location.href="?word=" + tsvs[t.selectedIndex] + "&selector=" + showSelect
+	}
+}
 </script>
+
