@@ -33,30 +33,42 @@ body {
   stroke: steelblue;
 }
 div.tooltip {   
-  position: absolute;           
-    text-align: left;           
-      width: 220px;                  
-      z-index:999999;
-	height: 100px;
-	  padding: 8px;             
-	    font: 12px sans-serif;        
-	      background: steelblue;   
-		border: 1px solid black;      
-		  border-radius: 8px;           
-		  font-size:10px;
-		    pointer-events: none;         
-		    }
+	position: absolute;           
+	text-align: left;           
+	z-index:999999;
+	padding: 8px;             
+	background: steelblue;   
+	border: 1px solid black;      
+	border-radius: 8px;           
+	font-size:10px;
+	pointer-events: none;
+	opacity: 0.8;
+}
 
-		    .tooltip h3 {text-align:center;margin-top:4px;margin-bottom:0px;padding-bottom:0px;}
-
+.tooltip h3 {
+	text-align:center;
+	margin-top:4px;
+	margin-bottom:0px;
+	padding-bottom:0px;
+}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.js"></script>
 <script>
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+	var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+		    var pair = vars[i].split('=');
+			    if (decodeURIComponent(pair[0]) == variable) {
+					return decodeURIComponent(pair[1]);
+						}
+						    }
+							}
 
 var margin = {top: 20, right: 50, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 670 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%d-%b-%y").parse,
     bisectDate = d3.bisector(function(d) { return d.year; }).left,
@@ -90,8 +102,12 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var word = getQueryVariable('word').replace("/","");
+var maxY = 0.05;
 
-d3.tsv("wordStatistic/aids.tsv", function(error, data) {
+if (word == "golf") maxY = 0.1;
+
+d3.tsv("wordStatistic/" + word + ".tsv", function(error, data) {
   data.forEach(function(d) {
     //d.date = parseDate(d.date);
     //d.close = +d.close;
@@ -102,7 +118,8 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
   });
 
   x.domain([data[0].year, data[data.length - 1].year]);
-  y.domain([0, 0.05]);
+  y.domain([0, maxY]);
+
   //y.domain(d3.extent(data, function(d) { return d.portion; }));
 
   svg.append("g")
@@ -115,14 +132,14 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
 	.attr("y", 10)
 	.attr("text-anchor", "middle")  
 	.style("font-size", "16px") 
-	.text("Anteil der Artikel mit dem Wort 'aids' im Magazin 'Die Zeit'")
+	.text("Anteil der Artikel mit dem Wort '"+word+"' im Magazin 'Die Zeit'")
 
       svg.append("text")
 	.attr("x", (width / 2))             
 	.attr("y", 30)
 	.attr("text-anchor", "middle")  
 	.style("font-size", "16px") 
-	.text("Skala: 0-0.05%")
+	.text("Skala: 0-"+maxY+"%")
 
   svg.append("g")
       .attr("class", "y axis")
@@ -162,7 +179,7 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
 
       var div = d3.select("body").append("div")   
 	  .attr("class", "tooltip")               
-	      .style("opacity", 0)
+	      //.style("opacity", 0)
 
   function mousemove() {
     var x0 = x.invert(d3.mouse(this)[0]),
@@ -173,19 +190,26 @@ d3.tsv("wordStatistic/aids.tsv", function(error, data) {
     focus.attr("transform", "translate(" + x(d.year) + "," + y(d.portion) + ")");
 
     var txt = 
-	      "<h3 style=''>" + d.year + "</h3><br/>"
-	    + "Anzahl Artikel in diesem Jahr:<br/>"
-	    + "Mit dem Wort aids: " + d.word_count + " (" + formatValue(d.portion) + "%)</span><br />"
-	    + "Gesamt: " + formatValueTotal(d.total_count)
+	      "<strong>" + d.year + "<span style='float:right'>" + formatValue(d.portion)
+	      + "%</span></strong><br/>"
+	    + "Artikel die '"+word+"' enthielten: " + d.word_count + "</span><br />"
+	    + "Artikel gesamt: " + formatValueTotal(d.total_count)
 
     //focus.select("text").html(txt);
     //focus.select("text").text(formatCurrency(d.portion));
 
 
+var top = (d3.event.pageY - 60);
+var left = (d3.event.pageX);
+
+var w = width - margin.left - margin.right;
+if (left > w) left = w;
+if (top < 60) top = 60;
+
 	div.html(txt)  
-		.style("left", (d3.event.pageX) + "px")     
-		.style("top", (d3.event.pageY - 110) + "px")
-		.style("opacity", "1.0");    
+		.style("left", left + "px")     
+		.style("top", top + "px")
+		//.style("opacity", "1.0");    
 
   }
 });
