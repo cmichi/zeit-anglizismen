@@ -44,11 +44,13 @@ to the visualizations.
 	# which contains the total number of articles available in
 	# each year.
 
+	$ node outputAll.js > ./tmp_normalize/all.json
+
 	$ make wordStatistic
 	# results in ./wordStatistic/$anglicism.tsv for each anglicism.
 
 	$ python -mSimpleHTTPServer
-	# open http://localhost:8000/?word=greenpeace in your browser.
+	# open http://localhost:8000/?word=greenpeace&selector=1 in your browser.
 
 
 # License (MIT)
